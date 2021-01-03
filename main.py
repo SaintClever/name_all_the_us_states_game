@@ -20,28 +20,29 @@ turtle.shape(image)
 data = pd.read_csv('50_states.csv')
 
 
+# state
+state = list(data['state'])
 
-game_state = ''
 
-while game_state != 'off':
-    answer_state = screen.textinput(title=f"/50 Guess the State", prompt="What's another state's name?").title()
+# coordinates
+coordinates = list(zip(data['x'], data['y']))
 
-    print(answer_state == data[answer_state == data['state']])
 
-    # state
-    state = data[answer_state == data['state']]
+# write to screen
+writer = turtle.Turtle(shape='circle')
 
-    # coordinates
-    coordinates = list(zip(state['x'], state['y']))
-    
-    # write to screen
-    writer = turtle.Turtle(shape='circle')
+
+answer_state = screen.textinput(title=f"/50 Guess the State", prompt="What's another state's name?").title()
+
+
+if answer_state in state:
     writer.penup()
     writer.color('#000fff')
     writer.shapesize(.25, .25)
     writer.goto(coordinates[0])
     writer.write(answer_state, align="left", font=("Arial", 8, "normal"))
-
+else:
+    print(False)
 
 
 
