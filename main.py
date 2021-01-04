@@ -29,28 +29,40 @@ coordinates = list(zip(data['x'], data['y']))
 
 
 
+game_on = True
+score = 0
 
-answer_state = screen.textinput(title=f"/50 Guess the State", prompt="What's another state's name?").title()
-
-# write to screen
-writer = turtle.Turtle(shape='circle')  
-writer.penup()
-writer.shapesize(.25, .25)
+while game_on:
+    
+    answer_state = screen.textinput(title=f"{score} / 50 Guess the State", prompt="What's another state's name?").title()
 
 
-if answer_state in state:
-    # If the user provided State exist in data['state']
-    state = data[data['state'] == answer_state]
+    # write to screen
+    writer = turtle.Turtle(shape='circle')
+    writer.penup()
+    writer.shapesize(.25, .25)
 
-    # Provide coordinates if exist
-    coordinates = list(zip(state['x'], state['y']))
 
-    # Plot location
-    writer.color('#000fff')
-    writer.goto(coordinates[0]) # location to go to
-    writer.write(answer_state, align="left", font=("Arial", 8, "normal"))
-else:
-    writer.write(answer_state, align="left", font=("Arial", 8, "normal"))
+    if answer_state in state:
+        # If the user provided State exist in data['state']
+        state = data[data['state'] == answer_state]
+
+        # Provide coordinates if exist
+        coordinates = list(zip(state['x'], state['y']))
+
+        # Plot location
+        writer.color('#000fff')
+        writer.goto(coordinates[0]) # location to go to
+        writer.write(answer_state, align='center', font=('Arial', 10, 'normal'))
+        score += 1
+    else:
+        writer.hideturtle()
+        writer.write('Try again please', align='center', font=('Arial', 10, 'normal'))
+
+
+    # Game status
+    if answer_state == 'Off':
+        game_on = False
 
 
 
