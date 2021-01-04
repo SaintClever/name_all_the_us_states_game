@@ -2,49 +2,35 @@ import turtle
 import pandas as pd
 
 
-
 screen = turtle.Screen()
 screen.title('U.S. States Game')
-
 image = 'blank_states_img.gif'
 screen.addshape(image)
 turtle.shape(image)
 
 
-# Get coordinates
-# def get_mouse_click_cor(x, y):
+# Capture mouse clicks
+# def capture_mouse_clicks_cor(x, y):
 #     print(x, y)
-# turtle.onscreenclick(get_mouse_click_cor)
+# turtle.onscreenclick(capture_mouse_clicks_cor)
 
 
 # data
 data = pd.read_csv('50_states.csv')
 
-
 game_on = True
 score = 0
 correct_answers = []
+INPUT_PROMPT_CAPTION = "What's another state's name?"
 
 
 while game_on:
 
-    # state
-    state = list(data['state'])
+    state = list(data['state']) # state
+    coordinates = list(zip(data['x'], data['y']))  # coordinates
+    user_answer = screen.textinput(title=f'{score} / 50 Guessed States', prompt=INPUT_PROMPT_CAPTION).title()
 
-    # coordinates
-    coordinates = list(zip(data['x'], data['y']))
-
-
-    user_answer = screen.textinput(title=f"{score} / 50 Guess the State", prompt="What's another state's name?").title()
-
-
-    # write to screen
-    writer = turtle.Turtle()
-    writer.penup()
-    writer.shape('circle')
-
-
-
+    screen.tracer(0)
     if user_answer in state:
         # If the user provided State exist in data['state']
         state = data[data['state'] == user_answer]
@@ -52,8 +38,9 @@ while game_on:
         # Provide coordinates if exist
         coordinates = list(zip(state['x'], state['y']))
 
-        # Plot location
-        writer.clear() # clear previous text
+        # Write / plot location to screen
+        writer = turtle.Turtle('circle')
+        writer.penup()
         writer.color('#086a80')
         writer.shapesize(stretch_wid=.20, stretch_len=.20)
         writer.goto(coordinates[0]) # location to go to
@@ -63,25 +50,18 @@ while game_on:
         # if not append and add 1 to score else do nothing
         if user_answer not in correct_answers:
             correct_answers.append(user_answer)
+            INPUT_PROMPT_CAPTION = "What's another state's name?"
             score += 1
-            
-    # elif user_answer == 'Reset':
-    #     screen.clear()
-    #     correct_answers = []
-    #     score = 0
 
-    # elif user_answer == 'Off': # Game status
-    #     game_on = False
+    elif user_answer == 'Quit':
+        INPUT_PROMPT_CAPTION = "You've scored {score} / 50"
+        correct_answers = []
+        score = 0
 
-    # elif len(correct_answers) == len(state):
-    #     writer.clear() # clear previous text
-    #     writer.home() # return home
-    #     writer.write('You did it!', align='center', font=('Arial', 12, 'normal'))
-
-        
+    elif len(correct_answers) == len(state):
+        INPUT_PROMPT_CAPTION = 'Yay! You did it!'
     else:
-        writer.clear() # clear previous text
-        writer.write('Try again please', align='center', font=('Arial', 12, 'normal'))
+        INPUT_PROMPT_CAPTION = 'Oops! Try again please'
 
-    
+    screen.update()
 turtle.mainloop()
