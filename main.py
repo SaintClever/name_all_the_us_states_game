@@ -20,20 +20,20 @@ turtle.shape(image)
 # data
 data = pd.read_csv('50_states.csv')
 
-# state
-state = list(data['state'])
-
-# coordinates
-coordinates = list(zip(data['x'], data['y']))
-
-
-
 
 game_on = True
 score = 0
 
+
 while game_on:
+
+    # state
+    state = list(data['state'])
+
+    # coordinates
+    coordinates = list(zip(data['x'], data['y']))
     
+
     answer_state = screen.textinput(title=f"{score} / 50 Guess the State", prompt="What's another state's name?").title()
 
 
@@ -55,14 +55,17 @@ while game_on:
         writer.goto(coordinates[0]) # location to go to
         writer.write(answer_state, align='center', font=('Arial', 10, 'normal'))
         score += 1
+
+    elif answer_state == 'Off': # Game status
+        game_on = False
+
     else:
-        writer.hideturtle()
+        writer.clear()
         writer.write('Try again please', align='center', font=('Arial', 10, 'normal'))
 
+    
 
-    # Game status
-    if answer_state == 'Off':
-        game_on = False
+
 
 
 
