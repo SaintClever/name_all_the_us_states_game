@@ -16,12 +16,12 @@ turtle.shape(image)
 
 
 # data
-data = pd.read_csv('50_states.csv')
+data = pd.read_csv('states.csv')
 
 game_on = True
 score = 0
 correct_answers = []
-INPUT_PROMPT_CAPTION = "What's another state's name?"
+INPUT_PROMPT_CAPTION = "Let's name some states: "
 
 
 while game_on:
@@ -50,13 +50,28 @@ while game_on:
         # if not append and add 1 to score else do nothing
         if user_answer not in correct_answers:
             correct_answers.append(user_answer)
-            INPUT_PROMPT_CAPTION = "What's another state's name?"
+            INPUT_PROMPT_CAPTION = "What's another state?"
             score += 1
 
     elif user_answer == 'Quit':
-        INPUT_PROMPT_CAPTION = "You've scored {score} / 50"
-        correct_answers = []
+        INPUT_PROMPT_CAPTION = f"You've scored {score} / 50"
         score = 0
+
+        # display all missed answers
+        writer = turtle.Turtle()
+        writer.hideturtle()
+        writer.penup()
+        writer.color('#ff0000')
+
+        counter = 0
+        for answer in state:
+            if answer not in correct_answers:
+                state.remove(answer)
+                writer.goto(coordinates[counter]) # location to go to
+                writer.write(answer, align='left', font=('Arial', 12, 'normal'))
+                counter += 1
+        
+        correct_answers = []
 
     elif len(correct_answers) == len(state):
         INPUT_PROMPT_CAPTION = 'Yay! You did it!'
