@@ -15,7 +15,6 @@ turtle.shape(image)
 #     print(x, y)
 # turtle.onscreenclick(capture_mouse_clicks_cor)
 
-
 # data
 data = pd.read_csv('states.csv')
 
@@ -73,7 +72,7 @@ while game_on:
 
         # logic to displayed and print out missed US states to study
         us_states_study_sheet = []
-        
+
         for state in states: # i is the state names
             if state not in answered_states: # if i is not in guessed states display them in data
                 # print(i)
@@ -92,7 +91,6 @@ while game_on:
 
     elif user_answer == 'Exit' or user_answer == 'Bye':
         turtle.bye()
-    
     else:
         input_prompt_caption = 'Oops! Try again please'
 
