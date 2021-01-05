@@ -24,6 +24,7 @@ correct_answers = []
 input_prompt_caption = "Let's name some states: "
 NUMBER_OF_STATES = 50
 
+
 while game_on:
 
     state = list(data['state']) # state
