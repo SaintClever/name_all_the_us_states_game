@@ -97,5 +97,5 @@ while game_on:
         input_prompt_caption = 'Oops! Try again please'
 
 
-    screen.update() # updat
+    screen.update() # update animation
 turtle.mainloop()
