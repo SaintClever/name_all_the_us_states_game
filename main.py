@@ -4,10 +4,11 @@ import pandas as pd
 
 screen = turtle.Screen()
 screen.title('U.S. States Game')
-image = 'blank_states_img.gif'
+screen.setup(725, 491)
+
+image = 'blank_states.gif'
 screen.addshape(image)
 turtle.shape(image)
-
 
 # Capture mouse clicks
 # def capture_mouse_clicks_cor(x, y):
@@ -31,7 +32,7 @@ while game_on:
     coordinates = list(zip(data['x'], data['y']))  # coordinates
     user_answer = screen.textinput(title=f'{score} / {NUMBER_OF_STATES} Guessed States', prompt=input_prompt_caption).title()
 
-    screen.tracer(0)
+    screen.tracer(0) # turn of animation
     if user_answer in state:
         # If the user provided State exist in data['state']
         state = data[data['state'] == user_answer]
@@ -54,8 +55,8 @@ while game_on:
             input_prompt_caption = "What's another state?"
             score += 1
 
-    elif user_answer == 'Quit':
-        input_prompt_caption = f"You've scored {score} / {NUMBER_OF_STATES}"
+    elif user_answer == 'Quit' or user_answer == 'Answers' or user_answer == 'Print':
+        input_prompt_caption = f"You've scored {score} / {NUMBER_OF_STATES}\n US states study sheet created"
         
         # display all missed answers
         writer = turtle.Turtle()
@@ -63,7 +64,9 @@ while game_on:
         writer.penup()
         writer.color('#ff0000')
 
-        # logic to displayed missed states
+        # logic to displayed and print out missed US states to study
+        us_states_study_sheet = []
+        
         for i in state: # i is the state names
             if i not in correct_answers: # if i is not in guessed states display them in data
                 # print(i)
@@ -72,13 +75,21 @@ while game_on:
                 coordinates = list(zip(cor['x'], cor['y']))
                 writer.goto(coordinates[0]) # location to go to
                 writer.write(i, align='left', font=('Arial', 12, 'normal'))
+                us_states_study_sheet.append(i)
+                
+        # Print out missed US states to study
+        df = pd.DataFrame({'US states to study':us_states_study_sheet})
+        df.to_csv('us_states_to_study.csv')
         correct_answers = [] # reset correct answers
         score = 0 # reset score
 
     elif len(correct_answers) == len(state):
         input_prompt_caption = 'Yay! You did it!'
+
+    elif user_answer == 'Exit' or user_answer == 'Bye':
+        turtle.bye()
     else:
         input_prompt_caption = 'Oops! Try again please'
 
-    screen.update()
+    screen.update() # updat
 turtle.mainloop()
