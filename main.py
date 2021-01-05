@@ -21,14 +21,14 @@ data = pd.read_csv('states.csv')
 game_on = True
 score = 0
 correct_answers = []
-INPUT_PROMPT_CAPTION = "Let's name some states: "
-
+input_prompt_caption = "Let's name some states: "
+NUMBER_OF_STATES = 50
 
 while game_on:
 
     state = list(data['state']) # state
     coordinates = list(zip(data['x'], data['y']))  # coordinates
-    user_answer = screen.textinput(title=f'{score} / 50 Guessed States', prompt=INPUT_PROMPT_CAPTION).title()
+    user_answer = screen.textinput(title=f'{score} / {NUMBER_OF_STATES} Guessed States', prompt=input_prompt_caption).title()
 
     screen.tracer(0)
     if user_answer in state:
@@ -50,33 +50,34 @@ while game_on:
         # if not append and add 1 to score else do nothing
         if user_answer not in correct_answers:
             correct_answers.append(user_answer)
-            INPUT_PROMPT_CAPTION = "What's another state?"
+            input_prompt_caption = "What's another state?"
             score += 1
 
     elif user_answer == 'Quit':
-        INPUT_PROMPT_CAPTION = f"You've scored {score} / 50"
-        score = 0
-
+        input_prompt_caption = f"You've scored {score} / {NUMBER_OF_STATES}"
+        
         # display all missed answers
         writer = turtle.Turtle()
         writer.hideturtle()
         writer.penup()
         writer.color('#ff0000')
 
-        counter = 0
-        for answer in state:
-            if answer not in correct_answers:
-                state.remove(answer)
-                writer.goto(coordinates[counter]) # location to go to
-                writer.write(answer, align='left', font=('Arial', 12, 'normal'))
-                counter += 1
-        
-        correct_answers = []
+        # logic to displayed missed states
+        for i in state: # i is the state names
+            if i not in correct_answers: # if i is not in guessed states display them in data
+                # print(i)
+                # print(data[data['state'] == i])
+                cor = data[data['state'] == i]
+                coordinates = list(zip(cor['x'], cor['y']))
+                writer.goto(coordinates[0]) # location to go to
+                writer.write(i, align='left', font=('Arial', 12, 'normal'))
+        correct_answers = [] # reset correct answers
+        score = 0 # reset score
 
     elif len(correct_answers) == len(state):
-        INPUT_PROMPT_CAPTION = 'Yay! You did it!'
+        input_prompt_caption = 'Yay! You did it!'
     else:
-        INPUT_PROMPT_CAPTION = 'Oops! Try again please'
+        input_prompt_caption = 'Oops! Try again please'
 
     screen.update()
 turtle.mainloop()
